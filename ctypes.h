@@ -1,15 +1,15 @@
 #ifndef H_CTYPES
 #define H_CTYPES
 
+// typedefs for convenience and optimizations
+
 #include <stdbool.h>
 #include <stdint.h>
-
-// typedefs for convenience and optimizations
 
 // 0 to save ram and optimize for embedded systems
 // 1 to gain extra speed by replacing all floats by doubles
 // 2 to gain extra speed by using bigger integers depending on arch
-// level 2 includes *heavy* optimizations that will definitely eat your ram
+// level 2 "optimizations" will definitely eat your ram
 #define CTYPES_SPEED 0
 
 ///////////////////
@@ -26,11 +26,9 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
-// float and double are not fixed-size by the C standard
-// however, the C standard strongly suggests using IEEE 754
-// in IEEE 754, float is 32 bits and double 64 bits
-// howevevr, long double is whatever size the compiler prefers
-// this is why we redefine float and double but not long double
+// the floating point number representation is not defined by the C standard
+// however, it strongly suggests using the IEEE 754 norm for that task
+// "long double" is not redefined because it is compiler-dependant
 typedef float f32;
 typedef double f64;
 
@@ -40,13 +38,13 @@ typedef double f64;
 
 // the best optimization out there
 // doubles are usually slower than floats for various reasons
-// on embedded systems though, it is usually the opposite
+// on embedded systems though, it is most likely the opposite
 #if CTYPES_SPEED > 0
 typedef f64 f32;
 #endif
 
 // the following block tries to optimize speed at the cost of ram
-// we are testing the architecturee in the most portable way possible
+// we are testing the architecture in the most portable way possible
 // the following macro is not mandatory, obscure systems might not provide it
 // on 16 bits systems, 16-bit integer operations can be the fastest
 // on 32 bits systems, 32-bit integer operations can be the fastest
